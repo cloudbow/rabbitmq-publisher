@@ -2,4 +2,66 @@ RabbitMQ Publisher
 ==================
 
 
-Manage connections in a peristent way.
+This code allows you to create persistent connections to RabbitMQ and avoid the typical shutdown exceptions when connected to RabbitMQ. This library makes sure that you can send messages with zero loss . Waiting if necessary until the connection is available.
+
+
+Pooling Connections
+===================
+
+The connections are pooled in a central place and maintained in a central place. As per the benchmark test the Rabbit consumers works best with one channel over one connection paradigm .Although Rabbit recommends to have multiple channels with one connection the approach of one channel per connection seems to give best througput.
+
+
+Reconnections
+=============
+
+Reconnections are handled transparently in code . An old connection is replaced with newer one automatically without having to do anything extra from client side
+
+
+
+Usage
+=====  
+
+Create  connection manager singleton
+------------------------------------
+RabbitMQConnectionManager RABBIT_MQ_CONNECTION_MANAGER = RabbitMQConnectionManager.getInstance(new RabbitConnectionConfig(connectionConfig.asConnectionFactory(),null);
+// Second argument is high availability host which can be null
+
+Hint that a connection and channel needed
+------------------------------------------
+RABBIT_MQ_CONNECTION_MANAGER.hintResourceAddition();
+// Each hint is one connection
+
+
+Get Channel
+------------
+ final AmqpChannel amqpChannel = RABBIT_MQ_CONNECTION_MANAGER.getChannel();
+//causes the channel to be removed from pool and hence need to be referenced from a class using an instance variable.
+// variable needs to be reference on I/O exception. This will help in avoiding a single message also
+ Channel  channel = amqpChannel.getChannel(); 
+//actual channel
+
+
+Send a message with zero loss
+-----------------------------
+final AmqpChannel amqpChannel = null;
+while(amqpChannel==null)
+{
+   amqpChannel = RABBIT_MQ_CONNECTION_MANAGER.getChannel();
+   Channel  channel = amqpChannel.getChannel();  
+   try {
+      channel.basicPublish("exch","routingKey",null,"message");
+   } catch(IOException e) {
+      amqpChannel=null;
+   }
+
+}
+
+
+
+
+
+
+
+
+
+
