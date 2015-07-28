@@ -23,6 +23,13 @@ Usage
 
 Create  connection manager singleton
 ------------------------------------
+private static final ConnectionFactory CONN_FACTORY = new ConnectionFactory();
+
+CONN_FACTORY.setUsername(userName);
+CONN_FACTORY.setPassword(password);
+CONN_FACTORY.setHost(host);
+CONN_FACTORY.setRequestedHeartbeat(25);
+
 RabbitMQConnectionManager RABBIT_MQ_CONNECTION_MANAGER = RabbitMQConnectionManager.getInstance(new RabbitConnectionConfig(connectionConfig.asConnectionFactory(),new Address[]{});
 // Second argument is high availability host which can be empty Address array
 
