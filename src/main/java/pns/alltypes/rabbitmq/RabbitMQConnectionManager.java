@@ -14,7 +14,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pns.alltypes.tasks.DelayedTaskQueue;
 
@@ -36,7 +37,7 @@ public class RabbitMQConnectionManager implements Serializable {
      *
      */
     private static final int MAX_CHANNELS_PER_CONSUMER = 0;
-    private static final Logger LOGGER = Logger.getLogger(RabbitMQConnectionManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConnectionManager.class);
 
     static class AmqpConnection {
 
@@ -271,10 +272,15 @@ public class RabbitMQConnectionManager implements Serializable {
 
     private static final RabbitMQConnectionManager RABBITMQ_CONNECTION_MANAGER = new RabbitMQConnectionManager();
 
+    private RabbitMQConnectionManager() {
+
+    }
+
     public static synchronized RabbitMQConnectionManager getInstance(final RabbitConnectionConfig connectionConfig) {
 
         if (!RabbitMQConnectionManager.inited) {
             RabbitMQConnectionManager.CONN_CONFIG = connectionConfig;
+            RabbitMQConnectionManager.inited = true;
             // RabbitMQConnectionManager.createResources();
         }
 

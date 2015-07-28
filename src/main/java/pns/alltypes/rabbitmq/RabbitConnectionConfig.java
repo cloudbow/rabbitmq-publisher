@@ -1,15 +1,16 @@
 package pns.alltypes.rabbitmq;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.rabbitmq.client.Address;
 import com.rabbitmq.client.ConnectionFactory;
 
 public class RabbitConnectionConfig {
 
-    private static final Logger LOGGER = Logger.getLogger(RabbitConnectionConfig.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitConnectionConfig.class);
     private ConnectionFactory connectionFactory;
-    private Address[] highAvailabilityHosts;
+    private Address[] highAvailabilityHosts = new Address[] {};
 
     public RabbitConnectionConfig(final ConnectionFactory connectionFactory, final Address[] highAvailabilityHosts) {
         this.connectionFactory = connectionFactory;
