@@ -56,7 +56,7 @@ while(amqpChannel==null)
    amqpChannel = RABBIT_MQ_CONNECTION_MANAGER.getChannel();
    Channel  channel = amqpChannel.getChannel();  
    try {
-      channel.basicPublish("exch","routingKey",null,"message");
+      channel.basicPublish("exchangename","queuename",null,"message");
    } catch(IOException e) {
       amqpChannel=null;
    }
