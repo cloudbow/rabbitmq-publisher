@@ -23,8 +23,8 @@ Usage
 
 Create  connection manager singleton
 ------------------------------------
-RabbitMQConnectionManager RABBIT_MQ_CONNECTION_MANAGER = RabbitMQConnectionManager.getInstance(new RabbitConnectionConfig(connectionConfig.asConnectionFactory(),null);
-// Second argument is high availability host which can be null
+RabbitMQConnectionManager RABBIT_MQ_CONNECTION_MANAGER = RabbitMQConnectionManager.getInstance(new RabbitConnectionConfig(connectionConfig.asConnectionFactory(),new Address[]{});
+// Second argument is high availability host which can be empty Address array
 
 Hint that a connection and channel needed
 ------------------------------------------
