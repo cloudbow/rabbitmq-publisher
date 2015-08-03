@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import pns.alltypes.tasks.DelayedTaskQueue;
 
+import com.rabbitmq.client.AlreadyClosedException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -210,6 +211,19 @@ public class RabbitMQConnectionManager implements Serializable {
          */
         public void release() {
 
+        }
+
+        /**
+         *
+         */
+        public void close() {
+            try {
+                channel.close();
+            } catch (final AlreadyClosedException e) {
+                RabbitMQConnectionManager.LOGGER.error(String.format("Rabbit Connection already closed %s", e));
+            } catch (final IOException e) {
+                RabbitMQConnectionManager.LOGGER.error(String.format("IO Exception occured on close %s", e));
+            }
         }
 
     }
@@ -501,6 +515,11 @@ public class RabbitMQConnectionManager implements Serializable {
 
         }
 
+    }
+
+    public AmqpChannel closeAndReopenChannel(final AmqpChannel channel) {
+        channel.close();
+        return getChannel();
     }
 
     public AmqpChannel getChannel() {
