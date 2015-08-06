@@ -8,7 +8,9 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pns.alltypes.rabbitmq.RabbitMQConnectionManager.AmqpChannel;
+import pns.alltypes.rabbitmq.config.RabbitConnectionConfig;
+import pns.alltypes.rabbitmq.io.AmqpChannel;
+import pns.alltypes.rabbitmq.sustained.RabbitMQConnectionManager;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Address;
