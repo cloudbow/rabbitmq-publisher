@@ -6,10 +6,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ShutdownListener;
+import com.rabbitmq.client.ShutdownSignalException;
+
 import pns.alltypes.rabbitmq.io.AmqpChannel;
 import pns.alltypes.rabbitmq.io.AmqpConnection;
-
-import com.rabbitmq.client.Channel;
 
 public class ChannelCreator implements Runnable {
 
@@ -35,6 +37,7 @@ public class ChannelCreator implements Runnable {
 
             }
             conn = rabbitMQConnectionManager.selectConnection();
+            final AmqpConnection conn2 = conn;
             if (ChannelCreator.LOGGER.isTraceEnabled()) {
                 ChannelCreator.LOGGER.trace(String.format("selected connection %s for creating channel", conn));
 
@@ -48,14 +51,17 @@ public class ChannelCreator implements Runnable {
                     ChannelCreator.LOGGER.trace("Trying to acquire channel");
                 }
                 final Channel channel = conn.getConnection().createChannel();
-                // channel.addShutdownListener(new ShutdownListener() {
-                //
-                // @Override
-                // public void shutdownCompleted(final ShutdownSignalException cause) {
-                // // recreate yourself
-                // RabbitMQConnectionManager.createChannel();
-                // }
-                // });
+                channel.addShutdownListener(new ShutdownListener() {
+
+                    @Override
+                    public void shutdownCompleted(final ShutdownSignalException cause) {
+                        // recreate yourself
+                        rabbitMQConnectionManager.hintResourceAddition();
+                        if (conn2 != null) {
+                            conn2.close();
+                        }
+                    }
+                });
                 amqpChannel = new AmqpChannel(UUID.randomUUID().toString(), channel);
                 if (ChannelCreator.LOGGER.isTraceEnabled()) {
                     ChannelCreator.LOGGER.trace(String.format("Acquired channel: %s", amqpChannel.getChannel()));

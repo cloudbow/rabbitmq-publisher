@@ -11,10 +11,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pns.alltypes.rabbitmq.sustained.RabbitMQConnectionManager;
-
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ShutdownSignalException;
+
+import pns.alltypes.rabbitmq.sustained.RabbitMQConnectionManager;
 
 public class AmqpConnection {
 
@@ -150,6 +150,14 @@ public class AmqpConnection {
      */
     public boolean isConnectionClosed() {
         return markedForDeletion.get();
+    }
+
+    /**
+     *
+     */
+    public void close() {
+        shutdownConnectionsAndRemoveMeta(connectionId);
+
     }
 
 }

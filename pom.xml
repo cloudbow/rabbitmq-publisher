@@ -13,7 +13,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.cloudbow</groupId>
 	<artifactId>rmq-publisher</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<name>High Performance RabbitMQ publisher</name>
 	<description>
       High performance RabbitMQ publisher which supports peristent connection.
@@ -59,21 +59,13 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.1.3</version>
 		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>1.1.3</version>
-		</dependency>
+		
 	</dependencies>
 
 
