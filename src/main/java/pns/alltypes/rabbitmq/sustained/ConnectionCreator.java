@@ -66,13 +66,13 @@ public class ConnectionCreator implements Runnable {
                         try {
 
                             amqpConnection2.shutdownConnectionsAndRemoveMeta(connectionId);
-                            rabbitMQConnectionManager.createConnection();
 
                         } catch (final Exception e) {
                             ConnectionCreator.LOGGER.error(String.format("Error occured on shutdown is %s", e));
 
                         } finally {
                             // dont care for other exception . go and create next connection and channel
+                            rabbitMQConnectionManager.createConnection();
                         }
 
                     }
