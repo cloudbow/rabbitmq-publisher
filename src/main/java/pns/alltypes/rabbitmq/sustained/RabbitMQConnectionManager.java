@@ -160,6 +160,12 @@ public class RabbitMQConnectionManager implements Serializable {
       final AmqpChannel amqpChannel = getChannelView().getChannel();
       return amqpChannel;
    }
+   
+   public AmqpChannel getChannelWithTimeout() {
+
+	      final AmqpChannel amqpChannel = getChannelView().getChannelWithTimeout();
+	      return amqpChannel;
+	   }
 
    /**
     *
