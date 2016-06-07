@@ -55,16 +55,22 @@ public class ChannelCreator implements Runnable {
 
                     @Override
                     public void shutdownCompleted(final ShutdownSignalException cause) {
+                       if(LOGGER.isTraceEnabled()) {
+                          LOGGER.trace(String.format("SHUTDOWN SIGNAL got for channel %s"),channel);
+                       }
                         // recreate yourself
                         rabbitMQConnectionManager.hintResourceAddition();
                         if (conn2 != null) {
+                            if(LOGGER.isTraceEnabled()) {
+                               LOGGER.trace(String.format("Shutting down connection %s of channel %s", conn2, channel),channel);
+                            }
                             conn2.close();
                         }
                     }
                 });
                 amqpChannel = new AmqpChannel(UUID.randomUUID().toString(), channel);
                 if (ChannelCreator.LOGGER.isTraceEnabled()) {
-                    ChannelCreator.LOGGER.trace(String.format("Acquired channel: %s", amqpChannel.getChannel()));
+                    ChannelCreator.LOGGER.trace(String.format("Acquired amqp %s , channel: %s",amqpChannel, amqpChannel.getChannel()));
                 }
                 // RabbitMQQueuePublisher.CHANNEL_LIST.add(amqpChannel);
                 rabbitMQConnectionManager.getChannelView().addChannel(amqpChannel);

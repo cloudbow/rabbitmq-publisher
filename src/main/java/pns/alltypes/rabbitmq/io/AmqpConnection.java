@@ -124,7 +124,7 @@ public class AmqpConnection {
 
     private void shutdownChannel(final AmqpChannel channel) {
         if (AmqpConnection.LOGGER.isTraceEnabled()) {
-            AmqpConnection.LOGGER.trace("Shutting down channel " + channel);
+            AmqpConnection.LOGGER.trace(String.format("Shutting down channel %s " , channel));
         }
         try {
             channel.markForDeletion();
@@ -132,11 +132,11 @@ public class AmqpConnection {
             // RabbitMQQueuePublisher.CHANNEL_LIST.remove(channel);
             channel.getChannel().close();
         } catch (final IOException e) {
-            AmqpConnection.LOGGER.error(String.format("Error occured in shutting down %s", e));
+            AmqpConnection.LOGGER.error(String.format("Error occured in shutting down channel %s", e));
             // Thread.currentThread().interrupt();
             // ignore;
         } catch (final ShutdownSignalException e) {
-            AmqpConnection.LOGGER.error(String.format("Error occured in shutting down %s", e));
+            AmqpConnection.LOGGER.error(String.format("Error occured in shutting down channel %s", e));
             // This exception thrown if channel is already closed (by connection shutdown)
             // ignore
         } finally {
