@@ -212,6 +212,5 @@ public class RabbitMQConnectionManager implements Serializable {
    public ChannelView getChannelView() {
       return channelView;
    }
->>>>>>> develop
 
 }
