@@ -3,6 +3,8 @@
  */
 package pns.alltypes.rabbitmq.sustained;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,24 @@ public class ChannelView {
     */
    public ChannelView(final RabbitMQConnectionManager rabbitMQConnectionManager) {
       this.rabbitMQConnectionManager = rabbitMQConnectionManager;
+   }
+
+   public AmqpChannel getChannelWithTimeout() {
+      AmqpChannel channel = null;
+      try {
+         ChannelView.LOGGER.trace("ChannelView: getting channel with timeout");
+         channel = rabbitMQConnectionManager.getChannelList().pollFirst(30, TimeUnit.SECONDS);
+         if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace(String.format("Got a channel from channel view %s", channel));
+         }
+      }
+      catch (final InterruptedException e) {
+         Thread.currentThread().interrupt();
+
+      }
+
+      return channel;
+
    }
 
    public AmqpChannel getChannel() {
